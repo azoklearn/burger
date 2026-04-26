@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Smash Burger Strasbourg — Smashé. Saisi. Servi.</title>
   <meta name="description" content="Smash burgers smashés à 230°C, viande 100% alsacienne, recettes maison. Deux adresses à Strasbourg : Place Kléber & Quartier de la Gare." />
   <meta name="theme-color" content="#0a0908" />
@@ -246,8 +246,16 @@
     .hamburger {
       display: none;
       flex-direction: column;
+      justify-content: center;
       gap: 5px;
       cursor: pointer;
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin-right: -10px;
     }
 
     .hamburger span {
@@ -256,7 +264,60 @@
       height: 2px;
       background: var(--white);
       border-radius: 2px;
+      transition: transform 0.3s var(--ease), opacity 0.2s var(--ease);
     }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 190;
+      background: rgba(8,8,8,0.96);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s var(--ease), visibility 0.3s var(--ease);
+      padding: env(safe-area-inset-top) 24px env(safe-area-inset-bottom);
+    }
+    .mobile-menu.open { opacity: 1; visibility: visible; }
+    .mobile-menu a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 14px 20px;
+      transform: translateY(12px);
+      opacity: 0;
+      transition: transform 0.4s var(--ease), opacity 0.4s var(--ease);
+    }
+    .mobile-menu.open a { transform: translateY(0); opacity: 1; }
+    .mobile-menu.open a:nth-child(1) { transition-delay: 0.05s; }
+    .mobile-menu.open a:nth-child(2) { transition-delay: 0.1s; }
+    .mobile-menu.open a:nth-child(3) { transition-delay: 0.15s; }
+    .mobile-menu.open a:nth-child(4) { transition-delay: 0.2s; }
+    .mobile-menu.open a:nth-child(5) { transition-delay: 0.25s; }
+    .mobile-menu .btn-mobile-cta {
+      background: var(--red);
+      padding: 16px 36px;
+      border-radius: 999px;
+      font-size: 14px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-top: 20px;
+    }
+    body.menu-open { overflow: hidden; }
 
     /* ── HERO ── */
     #hero {
@@ -1231,37 +1292,140 @@
       color: rgba(255,255,255,0.28);
     }
 
+    /* ── TABLET ── */
+    @media (max-width: 1024px) {
+      .menu-grid, .menu-panel.active { grid-template-columns: repeat(2, 1fr); }
+      .side-grid { grid-template-columns: repeat(2, 1fr); }
+      .avis-grid { grid-template-columns: 1fr 1fr; }
+      .avis-grid > .avis-card:nth-child(3) { grid-column: 1 / -1; }
+      #histoire, #localisation { gap: 60px; padding-left: 40px; padding-right: 40px; }
+      #menu, #galerie, #avis, #cta, #newsletter, footer { padding-left: 40px; padding-right: 40px; }
+      nav { padding: 0 32px; }
+      .hero-content { left: 40px; right: 40px; }
+    }
+
     /* ── MOBILE ── */
-    @media (max-width: 900px) {
-      nav { padding: 0 24px; }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; height: 64px; padding-top: env(safe-area-inset-top); height: calc(64px + env(safe-area-inset-top)); }
+      section[id] { scroll-margin-top: 64px; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
+      .nav-logo { font-size: 12px; letter-spacing: 0.16em; gap: 8px; }
+      .nav-logo img.logo-img { width: 32px; height: 32px; }
 
-      #stats { gap: 32px; padding: 24px 24px; flex-wrap: wrap; }
+      #hero { min-height: 560px; height: 100svh; }
+      .hero-img { transform: none !important; }
+      .hero-content {
+        left: 20px; right: 20px;
+        bottom: calc(56px + env(safe-area-inset-bottom));
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 28px;
+      }
+      .hero-label { font-size: 10px; letter-spacing: 0.22em; margin-bottom: 16px; }
+      .hero-buttons { gap: 10px; width: 100%; }
+      .hero-buttons .btn-primary, .hero-buttons .btn-ghost { flex: 1; justify-content: center; padding: 15px 18px; font-size: 11px; min-height: 48px; }
+      .hero-address { text-align: left; font-size: 11px; line-height: 1.7; }
+      .scroll-hint { display: none; }
+
+      #stats { gap: 0; padding: 22px 16px; flex-wrap: wrap; row-gap: 22px; }
+      .stat { flex: 1 1 40%; }
+      .stat-num { font-size: 28px; }
+      .stat-label { font-size: 9px; letter-spacing: 0.18em; }
       .stat-divider { display: none; }
 
-      #menu, #galerie, #avis, #histoire, #localisation, #cta, #newsletter, footer { padding-left: 24px; padding-right: 24px; }
+      #menu, #galerie, #avis, #cta, #newsletter, footer { padding-left: 20px; padding-right: 20px; }
+      #menu, #galerie, #avis { padding-top: 80px; padding-bottom: 80px; }
+      #histoire, #localisation { padding: 80px 20px; }
 
-      .menu-header { flex-direction: column; align-items: flex-start; gap: 24px; }
-      .menu-panel.active { grid-template-columns: 1fr; }
-      .side-grid { grid-template-columns: 1fr; }
+      .section-title { font-size: clamp(34px, 9vw, 48px); margin-bottom: 18px; }
+      .section-body { font-size: 13px; }
+      .section-eyebrow { font-size: 9px; letter-spacing: 0.24em; }
 
-      #histoire { grid-template-columns: 1fr; gap: 40px; padding-top: 80px; padding-bottom: 80px; }
-      .histoire-visual { height: 320px; }
+      .menu-header { flex-direction: column; align-items: flex-start; gap: 22px; margin-bottom: 40px; }
+      .menu-tabs {
+        align-self: stretch;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        justify-content: flex-start;
+      }
+      .menu-tabs::-webkit-scrollbar { display: none; }
+      .menu-tab { flex-shrink: 0; padding: 10px 18px; min-height: 40px; }
+      .menu-grid, .menu-panel.active { grid-template-columns: 1fr; gap: 16px; }
+      .menu-card-img { height: 200px; }
+      .menu-card-body { padding: 20px 20px 22px; }
+      .menu-card-name { font-size: 16px; }
+      .menu-card-desc { font-size: 12.5px; margin-bottom: 18px; }
+      .btn-add { width: 44px; height: 44px; }
+      .side-grid { grid-template-columns: 1fr; gap: 10px; }
+      .side-card { padding: 18px 18px; min-height: 64px; }
 
-      #localisation { grid-template-columns: 1fr; gap: 40px; padding-top: 80px; padding-bottom: 80px; }
+      #histoire { grid-template-columns: 1fr; gap: 36px; }
+      .histoire-visual { height: 360px; }
+      .histoire-img-main { width: 82%; height: 84%; font-size: 56px; }
+      .histoire-img-accent { width: 56%; height: 50%; padding: 18px; }
+      .histoire-img-accent .big-num { font-size: 40px; }
 
-      .avis-grid { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr 1fr; }
-      .galerie-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-      .galerie-cell.span-rows { grid-row: span 1; }
+      .galerie-header { margin-bottom: 36px; }
+      .galerie-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px 200px; gap: 8px; }
+      .galerie-cell.span-rows { grid-row: span 2; grid-column: span 2; }
+      .galerie-cell { font-size: 36px; }
 
-      .hero-content { left: 24px; right: 24px; bottom: 60px; flex-direction: column; align-items: flex-start; }
-      .hero-address { text-align: left; }
+      .avis-header { flex-direction: column; align-items: flex-start; gap: 24px; margin-bottom: 36px; }
+      .avis-header > div:last-child { text-align: left !important; }
+      .avis-header > div:last-child .avis-stars { justify-content: flex-start; }
+      .avis-score { font-size: 40px; }
+      .avis-grid { grid-template-columns: 1fr; gap: 14px; }
+      .avis-grid > .avis-card:nth-child(3) { grid-column: auto; }
+      .avis-card { padding: 22px; }
+      .avis-card-quote { font-size: 13.5px; margin-bottom: 18px; }
 
-      #newsletter { gap: 32px; }
+      #localisation { grid-template-columns: 1fr; gap: 36px; }
+      .loc-map { height: 320px; }
+      .horaire-row { padding: 14px 16px; font-size: 12.5px; }
+
+      #cta { padding: 100px 20px; }
+      #cta::before { font-size: 38vw; letter-spacing: -4px; opacity: 0.5; }
+      .cta-title { font-size: clamp(38px, 11vw, 64px); margin-bottom: 28px; }
+      .cta-buttons { flex-direction: column; align-items: stretch; gap: 10px; max-width: 320px; margin: 0 auto; }
+      .cta-buttons .btn-white, .cta-buttons .btn-outline-white { justify-content: center; min-height: 50px; }
+
+      #newsletter { flex-direction: column; gap: 28px; padding: 64px 20px; }
+      .nl-left { text-align: left; width: 100%; }
       .nl-form { flex-direction: column; width: 100%; }
-      .nl-input { width: 100%; }
+      .nl-input { width: 100%; min-height: 50px; }
+      .nl-form .btn-primary { width: 100%; justify-content: center; min-height: 50px; }
+
+      footer { padding: 48px 20px 32px; padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 36px 24px; margin-bottom: 36px; }
+      .footer-brand { grid-column: 1 / -1; }
+      .footer-bottom { flex-direction: column; gap: 12px; align-items: flex-start; text-align: left; }
+
+      .social-btn { width: 44px; height: 44px; }
+    }
+
+    /* ── SMALL MOBILE ── */
+    @media (max-width: 420px) {
+      .nav-logo { font-size: 0; gap: 0; }
+      .nav-logo img.logo-img { width: 34px; height: 34px; }
+      #stats { padding: 20px 12px; row-gap: 18px; }
+      .stat-num { font-size: 24px; }
+      .galerie-grid { grid-template-columns: 1fr; grid-template-rows: 220px; grid-auto-rows: 200px; }
+      .galerie-cell.span-rows { grid-row: span 1; grid-column: span 1; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-brand { grid-column: auto; }
+      .menu-card-img { height: 180px; }
+      .histoire-visual { height: 300px; }
+      #cta::before { font-size: 44vw; }
+    }
+
+    /* Disable parallax / heavy hover on touch devices */
+    @media (hover: none) {
+      .menu-card:hover { transform: none; box-shadow: none; border-color: var(--hairline); }
+      .menu-card:hover .menu-card-img img { transform: none; }
+      .btn-primary:hover, .btn-ghost:hover, .btn-white:hover, .btn-outline-white:hover { transform: none; box-shadow: none; }
+      .btn-add:hover { transform: none; box-shadow: none; }
     }
   </style>
 </head>
@@ -1287,10 +1451,18 @@
       <li><a href="#localisation">Localisation</a></li>
       <li><a href="#menu" class="btn-nav">Commander</a></li>
     </ul>
-    <div class="hamburger">
+    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span><span></span>
-    </div>
+    </button>
   </nav>
+
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <a href="#menu">Menu</a>
+    <a href="#histoire">Notre histoire</a>
+    <a href="#galerie">Galerie</a>
+    <a href="#localisation">Localisation</a>
+    <a href="#menu" class="btn-mobile-cta">Commander</a>
+  </div>
 
   <main id="main">
 
@@ -1864,14 +2036,41 @@
       });
     });
 
-    // Hero parallax — subtle Y shift on the hero image
+    // Hero parallax — subtle Y shift on the hero image (desktop only)
     const heroImg = document.querySelector('.hero-img');
-    if (heroImg && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouch = window.matchMedia('(hover: none), (max-width: 768px)').matches;
+    if (heroImg && !noMotion && !isTouch) {
       window.addEventListener('scroll', () => {
         const y = Math.min(window.scrollY, 800);
         heroImg.style.transform = 'translate3d(0,' + (y * 0.18) + 'px,0) scale(' + (1 + y * 0.0004) + ')';
       }, { passive: true });
     }
+
+    // Mobile menu drawer
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const closeMenu = () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('menu-open');
+    };
+    const openMenu = () => {
+      hamburger.classList.add('open');
+      mobileMenu.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('menu-open');
+    };
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.contains('open') ? closeMenu() : openMenu();
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMenu();
+    });
   </script>
 </body>
 </html>
